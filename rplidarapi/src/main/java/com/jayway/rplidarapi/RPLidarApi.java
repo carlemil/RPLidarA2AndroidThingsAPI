@@ -47,12 +47,22 @@ public class RPLidarApi {
         }
     }
 
-    public void requestDeviceInfo(DeviceInfoCallback deviceInfoCallback) {
+    //https://github.com/SkRobo/rplidar/blob/master/rplidar.py
+    public void requestDeviceInfo(ResponseHandler responseHandler) {
         byte[] buffer = new byte[]{SYNC_BYTE1, GET_INFO_BYTE};
         serial.write(buffer);
         serial.read((data) -> {
             DeviceInfo deviceInfo = new DeviceInfo(data);
-            deviceInfoCallback.callback(deviceInfo);
+            responseHandler.handleResponse(deviceInfo);
+        });
+    }
+
+    public void requestDeviceHealthStatus(ResponseHandler responseHandler) {
+        byte[] buffer = new byte[]{SYNC_BYTE1, GET_HEALTH_BYTE};
+        serial.write(buffer);
+        serial.read((data) -> {
+            DeviceHealthStatus deviceHealthStatus = new DeviceHealthStatus(data);
+            responseHandler.handleResponse(deviceHealthStatus);
         });
     }
 

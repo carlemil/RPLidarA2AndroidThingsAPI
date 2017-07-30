@@ -25,6 +25,13 @@ public class MainActivity extends Activity {
 
         api.requestDeviceInfo(deviceInfo -> Log.d(TAG, "device info : " + deviceInfo));
 
+        try {
+            Thread.sleep(500);
+            api.requestDeviceHealthStatus(deviceHealth -> Log.d(TAG, "deviceHealth" + deviceHealth));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

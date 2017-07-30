@@ -5,7 +5,7 @@ package com.jayway.rplidarapi;
  */
 
 @SuppressWarnings("DefaultFileTemplate")
-public class DeviceInfo {
+public class DeviceInfo extends Response {
     private String model;
     private String firmwareVersion;
     private String hardware;

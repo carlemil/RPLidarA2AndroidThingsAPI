@@ -10,7 +10,7 @@ class ApiConstants {
     // --Commented out by Inspection (29/07/2017 18:34):static final byte SYNC_BYTE2 = 0x5A;
 
     static final byte GET_INFO_BYTE = 0x50;
-//    GET_HEALTH_BYTE = b'\x52'
+    static final byte GET_HEALTH_BYTE = 0x52;
 //
 //    STOP_BYTE = b'\x25'
 //    RESET_BYTE = b'\x40'

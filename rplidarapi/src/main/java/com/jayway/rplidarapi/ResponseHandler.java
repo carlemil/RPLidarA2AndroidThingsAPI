@@ -5,6 +5,6 @@ package com.jayway.rplidarapi;
  */
 
 @SuppressWarnings("DefaultFileTemplate")
-public interface DeviceInfoCallback {
-    void callback(DeviceInfo deviceInfo);
+public interface ResponseHandler {
+    void handleResponse(Response response);
 }
