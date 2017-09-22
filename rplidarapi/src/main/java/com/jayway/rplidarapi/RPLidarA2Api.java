@@ -109,15 +109,20 @@ public class RPLidarA2Api {
 
     public void startScan(ResponseHandler responseHandler) {
 
-//        byte[] buffer = new byte[]{SYNC_BYTE1, (byte) 0xF0, 0x02, (byte) 0xC4, 0x02, (byte) 0x91}; //A5 F0 02 C4 02 91};
-//        //serial.setDTR(false);
-//        serial.write(buffer);
-//        serial.read((data) -> {
-//            Log.d(TAG, String.valueOf(data));
-////            DeviceHealthStatus deviceHealthStatus = new DeviceHealthStatus(data);
-////            responseHandler.handleResponse(deviceHealthStatus);
-//        });
-        sendBlocking(SCAN, RCV_SCAN, 5000);
+        byte[] buffer = new byte[]{SYNC_BYTE1, SCAN_BYTE}; //(byte) 0xF0, 0x02, (byte) 0xC4, 0x02, (byte) 0x91}; //A5 F0 02 C4 02 91};
+        serial.setDTR(false);
+        serial.write(buffer);
+        serial.read((data) -> {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < data.length; i++) {
+                sb.append(data[i]);
+                if (i % 5 == 0)
+                    sb.append("\n");
+                else
+                    sb.append(", ");
+            }
+            Log.d(TAG, sb.toString());
+        });
     }
 
     protected boolean sendBlocking(byte command, byte expected, long timeout) {

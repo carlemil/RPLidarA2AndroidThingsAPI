@@ -3,6 +3,7 @@ package com.example.carlemil.myapplication;
 import android.app.Activity;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.jayway.rplidarapi.RPLidarA2Api;
 
@@ -23,9 +24,13 @@ public class MainActivity extends Activity {
         RPLidarA2Api api = new RPLidarA2Api(usbManager);
 
         try {
-            Thread.sleep(500);
-            api.startMotor(00);
-            //api.startScan(response -> Log.d(TAG, String.valueOf(response)));
+            api.startMotor(500);
+
+            Thread.sleep(2000);
+            api.startScan(response -> Log.d(TAG, String.valueOf(response)));
+
+            Thread.sleep(2000);
+            api.startMotor(0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
