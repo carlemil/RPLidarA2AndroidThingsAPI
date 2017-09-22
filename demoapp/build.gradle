@@ -32,6 +32,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.0'
     compileOnly 'com.google.android.things:androidthings:0.4.1-devpreview'
 
-
     implementation project(':rplidarapi')
 }

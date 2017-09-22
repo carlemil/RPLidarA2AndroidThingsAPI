@@ -12,7 +12,7 @@ public class DeviceInfo extends Response {
     private String serialnumber;
 
     DeviceInfo(byte[] data) {
-        if (data.length == 27) {
+        if (data.length == ApiConstants.DESCRIPTOR_LEN + ApiConstants.INFO_LEN) {
             model = Util.bytesToHex(data[7]);
             firmwareVersion = Util.bytesToHex(data[9]) + "." + Util.bytesToHex(data[8]);
             hardware = Util.bytesToHex(data[10]);
