@@ -6,5 +6,5 @@ package com.jayway.rplidarapi;
 
 @SuppressWarnings("DefaultFileTemplate")
 public interface ResponseHandler {
-    void handleResponse(Response response);
+    void handleResponse(Object response);
 }

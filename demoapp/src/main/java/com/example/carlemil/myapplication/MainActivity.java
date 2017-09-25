@@ -24,13 +24,15 @@ public class MainActivity extends Activity {
         RPLidarA2Api api = new RPLidarA2Api(usbManager);
 
         try {
-            api.startMotor(500);
+            api.startMotor();
+
+            Thread.sleep(4000);
+            api.startScan(response -> {
+                Log.d(TAG, String.valueOf(response));
+            });
 
             Thread.sleep(2000);
-            api.startScan(response -> Log.d(TAG, String.valueOf(response)));
-
-            Thread.sleep(2000);
-            api.startMotor(0);
+            api.stopMotor();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -8,9 +8,14 @@ import android.util.Log;
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import static com.jayway.rplidarapi.ApiConstants.*;
+import static com.jayway.rplidarapi.ApiConstants.HEALTH_BYTE;
+import static com.jayway.rplidarapi.ApiConstants.INFO_BYTE;
+import static com.jayway.rplidarapi.ApiConstants.SCAN_BYTE;
+import static com.jayway.rplidarapi.ApiConstants.SYNC_BYTE1;
 
 /**
  * Created by CarlEmil on 29/07/2017.
@@ -28,6 +33,8 @@ public class RPLidarA2Api {
     public static final byte RCV_SCAN = (byte) 0x81;
     public static final byte SYNC_BYTE0 = (byte) 0xA5;
     public static final byte START_MOTOR = (byte) 0xF0;
+    public static final int MAX_MOTOR_PWM = 1023;
+    public static final int DEFAULT_MOTOR_PWM = 660;
 
     public RPLidarA2Api(UsbManager usbManager) {
         Map<String, UsbDevice> connectedDevices = usbManager.getDeviceList();
@@ -103,25 +110,41 @@ public class RPLidarA2Api {
         sendPayLoad(command, payLoad);
     }
 
+    public void stopMotor() {
+        startMotor(0);
+    }
+
+    public void startMotor() {
+        startMotor(DEFAULT_MOTOR_PWM);
+    }
+
     public void startMotor(int speed) {
         sendPayLoad(START_MOTOR, speed);
     }
 
     public void startScan(ResponseHandler responseHandler) {
-
-        byte[] buffer = new byte[]{SYNC_BYTE1, SCAN_BYTE}; //(byte) 0xF0, 0x02, (byte) 0xC4, 0x02, (byte) 0x91}; //A5 F0 02 C4 02 91};
+        byte[] buffer = new byte[]{SYNC_BYTE1, SCAN_BYTE};
         serial.setDTR(false);
         serial.write(buffer);
+        List<ScanData> scanDataList = new ArrayList<>();
         serial.read((data) -> {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < data.length; i++) {
-                sb.append(data[i]);
-                if (i % 5 == 0)
-                    sb.append("\n");
-                else
-                    sb.append(", ");
+            int length = data.length / 5;
+            for (int i = 0; i < length; i = i + 5) {
+                int b0 = data[i + 0];
+                int b1 = data[i + 1];
+                int b2 = data[i + 2];
+                int b3 = data[i + 3];
+                int b4 = data[i + 4];
+                ScanData scanData = new ScanData(b0, b1, b2, b3, b4);
+                if (scanData.startBitSet) {
+                    responseHandler.handleResponse(scanDataList);
+                    scanDataList.clear();
+                }
+                scanDataList.add(scanData);
             }
-            Log.d(TAG, sb.toString());
+            if (length > 200)
+                Log.d("TAG", "l: " + scanDataList.size());
+
         });
     }
 
@@ -131,6 +154,7 @@ public class RPLidarA2Api {
             return true;
         } else {
             lastReceived = 0;
+
             long endTime = System.currentTimeMillis() + timeout;
             do {
                 sendNoPayLoad(command);

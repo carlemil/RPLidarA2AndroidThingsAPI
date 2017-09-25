@@ -5,7 +5,7 @@ package com.jayway.rplidarapi;
  */
 
 @SuppressWarnings("DefaultFileTemplate")
-public class DeviceHealthStatus extends Response {
+public class DeviceHealthStatus {
     private int status;
     private int errorcode;
 
