@@ -130,11 +130,11 @@ public class RPLidarA2Api {
         serial.read((data) -> {
             int length = data.length / 5;
             for (int i = 0; i < length; i = i + 5) {
-                int b0 = data[i + 0];
-                int b1 = data[i + 1];
-                int b2 = data[i + 2];
-                int b3 = data[i + 3];
-                int b4 = data[i + 4];
+                int b0 = data[i + 0] & 255;
+                int b1 = data[i + 1] & 255;
+                int b2 = data[i + 2] & 255;
+                int b3 = data[i + 3] & 255;
+                int b4 = data[i + 4] & 255;
                 ScanData scanData = new ScanData(b0, b1, b2, b3, b4);
                 if (scanData.startBitSet) {
                     responseHandler.handleResponse(scanDataList);
@@ -142,9 +142,6 @@ public class RPLidarA2Api {
                 }
                 scanDataList.add(scanData);
             }
-            if (length > 200)
-                Log.d("TAG", "l: " + scanDataList.size());
-
         });
     }
 
@@ -154,7 +151,6 @@ public class RPLidarA2Api {
             return true;
         } else {
             lastReceived = 0;
-
             long endTime = System.currentTimeMillis() + timeout;
             do {
                 sendNoPayLoad(command);
