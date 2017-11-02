@@ -34,5 +34,5 @@ dependencies {
 
     compile 'com.github.felHR85:UsbSerial:4.5'
 
-    compile 'com.github.carlemil:RPLidarA2AndroidThingsAPI:0.1.1-RC3'
+//    compile 'com.github.carlemil:RPLidarA2AndroidThingsAPI:0.1.1-RC4'
 }
