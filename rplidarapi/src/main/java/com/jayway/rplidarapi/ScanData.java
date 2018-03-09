@@ -6,7 +6,7 @@ import android.util.Log;
  * Created by carlemil on 9/25/17.
  */
 
-class ScanData {
+public class ScanData {
 
     public final int quality;
     public final boolean startBitSet;
