@@ -110,19 +110,20 @@ public class RPLidarA2Api {
         sendPayLoad(command, payLoad);
     }
 
-    public void stopMotor() {
+    public void stopScan() {
         startMotor(0);
     }
 
-    public void startMotor() {
-        startMotor(DEFAULT_MOTOR_PWM);
-    }
-
-    public void startMotor(int speed) {
+    protected void startMotor(int speed) {
         sendPayLoad(START_MOTOR, speed);
     }
 
     public void startScan(ResponseHandler responseHandler) {
+        startScan(responseHandler, DEFAULT_MOTOR_PWM);
+    }
+
+    public void startScan(ResponseHandler responseHandler, int speed) {
+        startMotor(speed);
         byte[] buffer = new byte[]{SYNC_BYTE1, SCAN_BYTE};
         serial.setDTR(false);
         serial.write(buffer);
