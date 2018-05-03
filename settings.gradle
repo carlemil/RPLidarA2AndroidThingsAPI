@@ -1,1 +1,1 @@
-include ':rplidarapi'
+include ':rplidarapi', ':debugmodule'
