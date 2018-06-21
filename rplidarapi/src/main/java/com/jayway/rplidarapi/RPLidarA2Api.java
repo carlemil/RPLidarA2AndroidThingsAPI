@@ -174,4 +174,7 @@ public class RPLidarA2Api {
         serial.write(dataOut);
     }
 
+    public boolean isLidarAvailable() {
+        return serial != null && serial.open();
+    }
 }
